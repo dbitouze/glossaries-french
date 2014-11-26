@@ -1,0 +1,17 @@
+French Language Module for glossaries Package
+
+Maintainer: 
+
+To install: copy *.ldf and *.dict to
+
+TEXMF/tex/latex/glossaries-contrib/glossaries-french/
+
+where TEXMF is the texmf root directory.
+
+The glossaries package (from version 4.12) will automatically 
+load this module if it is required.
+
+This material is subject to the LaTeX Project Public License.
+See http://www.ctan.org/license/lppl1.3
+for the details of that license.
+
