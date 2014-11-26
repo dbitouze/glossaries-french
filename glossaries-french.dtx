@@ -50,6 +50,12 @@
 % The rest of this documentation is in French, as it is most useful to French
 % speaking people.
 %
+% Nous n'apportons que peu de modifications au module initial : par défaut, le
+% \Package{glossaries} définit le suffixe des pluriels d'acronymes comme étant
+% identique à celui des pluriels en général, c'est-à-dire un \enquote{s}. Or, en
+% français, les acronymes sont invariables et donc leurs pluriels sont
+% identiques à leurs singuliers. Donc nous redéfinissons ce suffixe par défaut
+% des pluriels d'acronymes comme étant vide.
 %
 % \StopEventually{}
 %
@@ -123,12 +129,12 @@
 %    \end{macrocode}
 % Acronym default plural suffix:
 %    \begin{macrocode}
-\renewcommand*{\glsacrpluralsuffix}{\glspluralsuffix}
+\renewcommand*{\glsacrpluralsuffix}{}
 %    \end{macrocode}
 % Acronym in \cs{textsc} default plural suffix
 % (\cs{glstextup} is used to cancel the effect of \cs{textsc}):
 %    \begin{macrocode}
-\renewcommand*{\glsupacrpluralsuffix}{\glstextup{\glsacrpluralsuffix}}
+\renewcommand*{\glsupacrpluralsuffix}{}
 %    \end{macrocode}
 %\iffalse
 %    \begin{macrocode}
