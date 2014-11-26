@@ -19,10 +19,14 @@
 %\fi
 % \iffalse
 %<*driver>
-\documentclass{ltxdoc}
+\documentclass[english,french]{ltxdoc}
 
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[a4paper]{geometry}
+\usepackage[autostyle=once]{csquotes}
+\usepackage{babel}
 
 \CheckSum{80}
 
@@ -40,11 +44,16 @@
 % This language module simply needs to be installed. The \textsf{glossaries}
 % package (from version 4.12) will automatically load it if required.
 %
+% The rest of this documentation is in French, as it is most useful to French
+% speaking people.
 %
 %
-%\StopEventually{}
-%\section{The Code}
-%\iffalse
+% \StopEventually{}
+%
+% \selectlanguage{english}
+%
+% \section{The Code}
+% \iffalse
 %    \begin{macrocode}
 %<*glossaries-french.ldf>
 %    \end{macrocode}
