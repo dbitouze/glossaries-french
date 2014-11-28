@@ -2,9 +2,19 @@ French Language Module for glossaries Package
 
 Maintainer: Denis Bitouz\'e and Vincent Bela\"iche
 
-To install: copy *.ldf and *.dict to
+To install:
 
-TEXMF/tex/latex/glossaries-contrib/glossaries-french/
+1) execute the following to extract *.ldf and *.dict files:
+
+   latex glossaries-french.ins
+
+2) execute the following to compile documentation:
+
+   pdflatex glossaries-french.dtx
+
+3) copy *.ldf and *.dict to
+
+   TEXMF/tex/latex/glossaries-contrib/glossaries-french/
 
 where TEXMF is the texmf root directory.
 
