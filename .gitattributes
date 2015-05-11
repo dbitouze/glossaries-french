@@ -1,0 +1,6 @@
+*.dtx    text eol=lf
+*.ins    text eol=lf
+*.pdf    -text
+*.dict   text eol=lf		
+Makefile text eol=lf	
+README*  text eol=lf
