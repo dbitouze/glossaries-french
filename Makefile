@@ -1,4 +1,6 @@
-_RESURSE?=0
+_RECURSE=0
+VERSION?=#
+CTANTAG?=git tag  -m "Livraison au CTAN $(DATE)" "ctan$(VERSION)"
 TEXMF_INSTALL_DIR?=$(HOME)/texmf
 PACKAGE_NAME:=glossaries-french
 DISTTYPE?=dtx
@@ -37,6 +39,37 @@ install: $(PACKAGE_NAME).pdf $(STYFILES)
 $(eval $(call INSTALL,local,TEXMFLOCAL,$$(shell kpsewhich -var-value=TEXMFLOCAL)))
 
 $(eval $(call INSTALL,home,TEXMFHOME,$$(or $$(shell kpsewhich -var-value=TEXMFHOME),$$(HOME)/texmf)))
+
+define GET_VERSION_AWK
+BEGIN { FS="[][ \t]+v?" ; found = 0 };
+/\\ProvidesGlossariesLang\{[a-z]+\}\[[0-9]+\/[0-9]+\/[0-9]+ v[0-9]+\.[0-9]+\]/ { \
+	if ($$1 == "") 	print $$4; else print $$3; \
+	found = 1; \
+	exit(0) }; \
+END { if (found == 0) {print "Version non trouvée" >"/dev/stderr" ; exit(-1) } }
+endef
+
+.PHONY: ctantag
+ctantag: $(VERSION_M4)
+ifeq (0,$(_RECURSE))
+	$(MAKE) $@ \
+		VERSION=$(shell cat $(PACKAGE_NAME).dtx | awk '$(GET_VERSION_AWK)') \
+		DATE=$(shell date '+%Y-%m-%d') _RECURSE=1
+else
+	@echo 'Effectuer la commande suivante:'
+	@echo '$(CTANTAG)'
+	@select w in oui non; \
+	do \
+		case $$w in \
+			oui) \
+				$(CTANTAG); \
+				break;; \
+			non) \
+				echo 'abandon'; \
+				break;; \
+		esac; \
+	done
+endif
 
 .PHONY: ctan
 ctan: dist_forge/$(DISTTYPE)/$(PACKAGE_NAME).zip
