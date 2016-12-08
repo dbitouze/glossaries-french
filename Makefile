@@ -73,7 +73,10 @@ endif
 
 .PHONY: ctan
 ctan: dist_forge/$(DISTTYPE)/$(PACKAGE_NAME).zip
-
+	@echo ""
+	@echo "================================================================================="
+	@echo "Livrable : $(abspath dist_forge/$(DISTTYPE)/$(PACKAGE_NAME).zip)"
+	@echo "================================================================================="
 
 $(dtxPATH)/$(PACKAGE_NAME).zip: $(addprefix $(PACKAGE_NAME).,ins dtx pdf) README README.md \
 	$(dtxPATH)/$(PACKAGE_NAME).tds.zip
