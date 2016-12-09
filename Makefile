@@ -15,8 +15,8 @@ dtxTDsDoc := $(dtxTDS)/doc/latex/$(PACKAGE_NAME)
 dtxTDsSrc := $(dtxTDS)/source/latex/$(PACKAGE_NAME)
 dtxDIR := $(dtxPATH) $(dtxPKG) $(dtxTDsDoc) $(dtxTDsTeX) $(dtxTDS)
 
-$(foreach expr,$(join $(addsuffix :=,dtxRevTDsTeX dtxRevTDsDoc dtxRevTDsSrc),\
-	$(shell printf "%s\n%s\n%s\n" $(dtxTDsTeX) $(dtxTDsDoc) $(dtxTDsSrc) | sed 's![^/]\+!..!g')), \
+$(foreach expr,$(join $(addsuffix :=,dtxRevPKG dtxRevTDsTeX dtxRevTDsDoc dtxRevTDsSrc),\
+	$(shell printf "%s\n%s\n%s\n%s\n" $(dtxPKG) $(dtxTDsTeX) $(dtxTDsDoc) $(dtxTDsSrc) | sed 's![^/]\+!..!g')), \
    $(eval $(expr)))
 
 STYFILES:=glossaries-dictionary-French.dict $(PACKAGE_NAME).ldf
@@ -87,7 +87,7 @@ ctan: dist_forge/$(DISTTYPE)/$(PACKAGE_NAME).zip
 $(dtxPATH)/$(PACKAGE_NAME).zip: $(DOC) $(SRC) \
 	$(dtxPATH)/$(PACKAGE_NAME).tds.zip
 	mkdir -p $(dtxPKG)
-	for w in $(DOC) $(SRC); do ln -s $$w $(dtxPKG)/$$w; done
+	cd $(dtxPKG); for w in $(DOC) $(SRC); do ln -s $(dtxRevPKG)/$$w $$w; done
 	cd $(dtxPATH); zip -r $(PACKAGE_NAME).zip $(PACKAGE_NAME) $(PACKAGE_NAME).tds.zip
 
 $(dtxPATH)/$(PACKAGE_NAME).tds.zip: $(STYFILES) $(DOC) $(SRC)
