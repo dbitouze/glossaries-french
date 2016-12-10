@@ -32,7 +32,13 @@
 
 \title{Glossaries Language Module: glossaries-french}
 \author{Nicola Talbot \& Denis Bitouzé \& Vincent Belaïche}
-\date{version 1.1 (2014-11-26)}
+{\makeatletter
+\long\def\@tempa#1\ProvidesGlossariesLang#2[#3/#4/#5 v#6]#7\endinput{%
+  \toks0{#3}\toks1{#4}\toks2{#5}\toks3{#6}%
+}%
+\expandafter\@tempa\@@input glossaries-french.dtx
+\edef\@tempa{\noexpand\date{version \the\toks3 \space(\the\toks0-\the\toks1-\the\toks2)}}%
+\expandafter}\@tempa
 
 \newcommand{\package}[1]{\textsf{#1}}
 \newcommand{\Package}[1]{package \package{#1}}
@@ -68,7 +74,7 @@
 % \fi
 %\subsection{glossaries-french.ldf}
 %    \begin{macrocode}
-\ProvidesGlossariesLang{french}[2014/11/26 v1.1]
+\ProvidesGlossariesLang{french}[2016/12/12 v1.1]
 
 \glsifusedtranslatordict{French}
 {%

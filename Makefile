@@ -4,8 +4,11 @@ CTANTAG?=git tag  -m "Livraison au CTAN $(DATE)" "ctan$(VERSION)"
 TEXMF_INSTALL_DIR?=$(HOME)/texmf
 PACKAGE_NAME:=glossaries-french
 SRC:=$(addprefix $(PACKAGE_NAME).,dtx ins)
-DOC:=$(PACKAGE_NAME).pdf README README.md
+DOC:=$(PACKAGE_NAME).pdf README
 DISTTYPE?=dtx
+
+# Reversable Path Variables
+RPV:=dtxPKG dtxTDsTeX dtxTDsDoc dtxTDsSrc
 
 dtxPATH:= dist_forge/dtx
 dtxPKG := $(dtxPATH)/$(PACKAGE_NAME)
@@ -13,10 +16,11 @@ dtxTDS := $(dtxPATH)/tds
 dtxTDsTeX := $(dtxTDS)/tex/latex/$(PACKAGE_NAME)
 dtxTDsDoc := $(dtxTDS)/doc/latex/$(PACKAGE_NAME)
 dtxTDsSrc := $(dtxTDS)/source/latex/$(PACKAGE_NAME)
-dtxDIR := $(dtxPATH) $(dtxPKG) $(dtxTDsDoc) $(dtxTDsTeX) $(dtxTDS)
 
-$(foreach expr,$(join $(addsuffix :=,dtxRevPKG dtxRevTDsTeX dtxRevTDsDoc dtxRevTDsSrc),\
-	$(shell printf "%s\n%s\n%s\n%s\n" $(dtxPKG) $(dtxTDsTeX) $(dtxTDsDoc) $(dtxTDsSrc) | sed 's![^/]\+!..!g')), \
+$(foreach expr,$(join $(addsuffix RP:=,$(RPV)),\
+	$(shell printf "$(patsubst %,\%s\n,$(RPV))" \
+			$(foreach p,$(RPV),$($(p))) \
+		| sed 's![^/]\+!..!g')), \
    $(eval $(expr)))
 
 STYFILES:=glossaries-dictionary-French.dict $(PACKAGE_NAME).ldf
@@ -87,16 +91,16 @@ ctan: dist_forge/$(DISTTYPE)/$(PACKAGE_NAME).zip
 $(dtxPATH)/$(PACKAGE_NAME).zip: $(DOC) $(SRC) \
 	$(dtxPATH)/$(PACKAGE_NAME).tds.zip
 	mkdir -p $(dtxPKG)
-	cd $(dtxPKG); for w in $(DOC) $(SRC); do ln -s $(dtxRevPKG)/$$w $$w; done
+	cd $(dtxPKG); for w in $(DOC) $(SRC); do ln -s $(dtxPKGRP)/$$w $$w; done
 	cd $(dtxPATH); zip -r $(PACKAGE_NAME).zip $(PACKAGE_NAME) $(PACKAGE_NAME).tds.zip
 
 $(dtxPATH)/$(PACKAGE_NAME).tds.zip: $(STYFILES) $(DOC) $(SRC)
 	mkdir -p $(dtxTDsTeX)
 	mkdir -p $(dtxTDsDoc)
 	mkdir -p $(dtxTDsSrc)
-	cd $(dtxTDsDoc); for w in $(DOC); do ln -s $(dtxRevTDsDoc)/$$w $$w; done
-	cd $(dtxTDsTeX); for w in $(STYFILES); do ln -s $(dtxRevTDsTeX)/$$w $$w; done
-	cd $(dtxTDsSrc); for w in $(SRC); do ln -s $(dtxRevTDsSrc)/$$w $$w; done
+	cd $(dtxTDsDoc); for w in $(DOC); do ln -s $(dtxTDsDocRP)/$$w $$w; done
+	cd $(dtxTDsTeX); for w in $(STYFILES); do ln -s $(dtxTDsTeXRP)/$$w $$w; done
+	cd $(dtxTDsSrc); for w in $(SRC); do ln -s $(dtxTDsSrcRP)/$$w $$w; done
 	cd $(dtxTDS); zip -r $(PACKAGE_NAME).tds.zip doc tex source
 	mv $(dtxTDS)/$(PACKAGE_NAME).tds.zip $(dtxPATH)
 
@@ -120,5 +124,5 @@ squeaky: realclean
 
 .PHONY: realclean
 realclean: clean
-	rm -f $(STYFILES)
+	rm -f $(STYFILES) $(PACKAGE_NAME).pdf
 	rm -fr dist_forge
